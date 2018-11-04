@@ -100,10 +100,10 @@ class Model:
         fig, ax = plt.subplots(len(self.metrics), 1, figsize=(12,9))
         
         for i, metric in enumerate(self.metrics):
-            ax[i].set_title(metric)
+            ax[i].set_title(metric, fontsize=20)
             ax[i].plot(self.evals_result['train'][metric], '-b', lw=2, label='Training')
             ax[i].plot(self.evals_result['eval'][metric], '-r', lw=2, label='Validation')
-            ax[i].legend()
+            ax[i].legend(fontsize=16)
 
         plt.show()
 
@@ -111,10 +111,10 @@ class Model:
         ams_data = [self.score(W, y_pred, y_true, cutoff) for cutoff in np.linspace(0.1, .95, 100)]
         plt.figure(figsize=(12,9))
 
-        plt.title("AMS")
+        plt.title("AMS", fontsize=20)
         plt.plot(np.linspace(0.1, .95, 100), ams_data, lw=2)
-        plt.ylabel("AMS")
-        plt.xlabel("Cutoff Probability")
+        plt.ylabel("AMS", fontsize=16)
+        plt.xlabel("Cutoff Probability", fontsize=16)
 
         plt.show()
 
@@ -142,9 +142,15 @@ class Model:
         max_y = np.max(np.vstack((vals_bg.reshape((-1, 1)), vals_signal.reshape((-1, 1)))))
         plt.text(range_max - 0.3, max_y * 0.8, "AMS Score = {0:.4f}".format(ams), fontsize=16)
         # plt.text(range_max - 0.4, max_y * 0.7, "Classification Error = {0:.4f}".format(error), fontsize=16)
-
-        plt.legend()
+        
+        plt.legend(fontsize=16)
         plt.axis([range_min, range_max, 
                   0, 1000 + max_y])
 
+        plt.show()
+
+    def plot_importance(self, importance_type="weight"):
+        ax = xgb.plot_importance(self.bst, importance_type=importance_type)
+        fig = ax.figure
+        fig.set_size_inches(12,9)
         plt.show()
